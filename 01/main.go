@@ -10,14 +10,9 @@ import (
 
 func subdivideSeq[T any](in []T, num int) iter.Seq[[]T] {
 	return func(yield func([]T) bool) {
-		current := make([]T, num)
-		for i, el := range in {
-			current = append(current, el)
-			if (i+1)%num == 0 {
-				if !yield(current) {
-					return
-				}
-				current = make([]T, num)
+		for i := 0; i < len(in); i += num {
+			if !yield(in[i : i+num]) {
+				return
 			}
 		}
 
