@@ -8,22 +8,19 @@ import (
 	"github.com/RaphaelPour/stellar/input"
 )
 
+func Min(a, b int) int {
+	if a <= b {
+		return a
+	}
+	return b
+}
+
 func subdivideSeq[T any](in []T, num int) iter.Seq[[]T] {
 	return func(yield func([]T) bool) {
 		for i := 0; i < len(in); i += num {
-			if !yield(in[i : i+num]) {
+			if !yield(in[i:Min(i+num, len(in))]) {
 				return
 			}
-		}
-
-		// if in is not evenly divisible by num, panic
-		if len(in)%num != 0 {
-			panic(fmt.Sprintf(
-				"subdivide: slice must be evenly divisable by the given num, got len=%d num=%d mod-rest=%d",
-				len(in),
-				num,
-				len(in)%num,
-			))
 		}
 	}
 }
