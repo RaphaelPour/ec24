@@ -2,32 +2,15 @@ package main
 
 import (
 	"fmt"
-	"iter"
 	"strings"
 
 	"github.com/RaphaelPour/stellar/input"
+	"github.com/RaphaelPour/stellar/iter"
 )
-
-func Min(a, b int) int {
-	if a <= b {
-		return a
-	}
-	return b
-}
-
-func subdivideSeq[T any](in []T, num int) iter.Seq[[]T] {
-	return func(yield func([]T) bool) {
-		for i := 0; i < len(in); i += num {
-			if !yield(in[i:Min(i+num, len(in))]) {
-				return
-			}
-		}
-	}
-}
 
 func part(inputFile string, num int) {
 	sum := 0
-	for pair := range subdivideSeq[string](strings.Split(input.LoadString(inputFile)[0], ""), num) {
+	for pair := range iter.PairsSeq(strings.Split(input.LoadString(inputFile)[0], ""), num) {
 		team := num
 		for _, enemy := range pair {
 			switch enemy {
